@@ -1,34 +1,31 @@
-const nodeMailer = require("nodemailer");
+const SibApiV3Sdk = require('@getbrevo/brevo');
 
 const sendEmail = async (to, subject, text) => {
     try {
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.warn("Email credentials not configured. Skipping email send.");
-            return;
-        }
+        const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-        const transporter = nodeMailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    family: 4   // force IPv4
-});
+        apiInstance.setApiKey(
+            SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+            process.env.BREVO_API_KEY
+        );
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to,
+        await apiInstance.sendTransacEmail({
+            sender: {
+                email: process.env.EMAIL_USER,
+                name: "DailyCart"
+            },
+            to: [
+                {
+                    email: to
+                }
+            ],
             subject,
-            text
-        };
+            textContent: text
+        });
 
-        await transporter.sendMail(mailOptions);
-    }
-    catch (error) {
-        console.warn("Email sending failed, continuing without email:", error.message);
+        console.log("Email sent successfully");
+    } catch (error) {
+        console.error("Brevo Error:", error.response?.body || error.message);
     }
 };
 
