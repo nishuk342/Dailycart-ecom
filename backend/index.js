@@ -14,9 +14,7 @@ app.use(cors(
   }
 ));
 
-app.get("/", (req, res) => {
-  res.send("DailyCart is working Properly!");
-});
+
 
 app.use(express.json());
 
@@ -27,10 +25,10 @@ app.use('/api/payment', require("./routes/paymentRoutes"));
 app.use('/api/admin', require("./routes/adminRoutes")); 
 
 if(process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
   });
 } else {
   app.get("/", (req, res) => {
