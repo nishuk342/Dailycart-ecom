@@ -1,32 +1,29 @@
-const SibApiV3Sdk = require('@getbrevo/brevo');
+const { BrevoClient } = require("@getbrevo/brevo");
+
+const brevo = new BrevoClient({
+  apiKey: process.env.BREVO_API_KEY,
+});
 
 const sendEmail = async (to, subject, text) => {
-    try {
-        const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+  try {
+    await brevo.transactionalEmails.sendTransacEmail({
+      sender: {
+        name: "DailyCart",
+        email: process.env.EMAIL_USER,
+      },
+      to: [
+        {
+          email: to,
+        },
+      ],
+      subject,
+      textContent: text,
+    });
 
-        apiInstance.setApiKey(
-            SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
-            process.env.BREVO_API_KEY
-        );
-
-        await apiInstance.sendTransacEmail({
-            sender: {
-                email: process.env.EMAIL_USER,
-                name: "DailyCart"
-            },
-            to: [
-                {
-                    email: to
-                }
-            ],
-            subject,
-            textContent: text
-        });
-
-        console.log("Email sent successfully");
-    } catch (error) {
-        console.error("Brevo Error:", error.response?.body || error.message);
-    }
+    console.log("Email sent successfully");
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 module.exports = sendEmail;
