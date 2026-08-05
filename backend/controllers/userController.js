@@ -35,7 +35,7 @@ const registerUser = async (req, res) => {
       Please use this OTP to complete your registration process.
       Thank you for choosing DailyCart!
       `;
-
+        console.log({otp})
       await sendEmail(email, "Welcome to DailyCart!- Your OTP for Registration", message);
 
       res.status(201).json({

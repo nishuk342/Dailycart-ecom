@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { clearCart } from '../redux/cartSlice';
+import { apiFetch } from '../api';
 
 const Checkout = () => {
   const { user } = useContext(AuthContext);
@@ -19,7 +20,7 @@ const Checkout = () => {
   const handlePayment = async () => {
     try {
       console.log('Starting payment process...');
-      const orderRes = await fetch('/api/payment/order', {
+      const orderRes = await apiFetch('/api/payment/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: totalPrice })
@@ -62,7 +63,7 @@ const Checkout = () => {
       console.log('Sending order payload:', orderPayload);
       console.log('User token:', user?.token);
 
-      const saveOrderRes = await fetch('/api/orders', {
+      const saveOrderRes = await apiFetch('/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

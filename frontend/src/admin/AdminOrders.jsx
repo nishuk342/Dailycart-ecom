@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { apiFetch } from '../api';
 
 const normalizeStatus = (status = '') => {
   const value = String(status).toLowerCase();
@@ -30,7 +31,7 @@ const AdminOrders = () => {
       if (!user?.token) return;
 
       try {
-        const res = await fetch('/api/orders', {
+        const res = await apiFetch('/api/orders', {
           headers: { Authorization: `Bearer ${user.token}` }
         });
         const data = await res.json();
@@ -48,7 +49,7 @@ const AdminOrders = () => {
     const backendStatus = normalizeStatus(status);
 
     try {
-      const res = await fetch(`/api/orders/${id}/status`, {
+      const res = await apiFetch(`/api/orders/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
         body: JSON.stringify({ status: backendStatus })

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { apiFetch } from '../api';
 
 const formatJoinedDate = (createdAt) => {
   if (!createdAt) return 'N/A';
@@ -20,7 +21,7 @@ const AdminUsers = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch('/api/auth/users', {
+      const res = await apiFetch('/api/auth/users', {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       const data = await res.json();

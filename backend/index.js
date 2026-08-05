@@ -24,17 +24,15 @@ app.use('/api/orders', require("./routes/orderRoutes"));
 app.use('/api/payment', require("./routes/paymentRoutes"));
 app.use('/api/admin', require("./routes/adminRoutes")); 
 
-if(process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
+app.get("/", (req, res) => {
     res.send("DailyCart API is running..");
   });
-}
+
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "ok"
+    });
+});
 
 
 const PORT = process.env.PORT || 5050;
